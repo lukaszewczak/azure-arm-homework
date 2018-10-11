@@ -1,0 +1,10 @@
+# Tworze grupe robocza
+az group create --name pd3-rg-we-dev-lab --location westeurope
+
+
+# Deploy szablonu arm do grupy zasobow
+az group deployment create --resource-group pd3-rg-we-dev-lab --name zad3.2 --template-file azure-deploy-2vm-ubuntu.json --parameters azure-deploy-2vm-ubuntu.parameters.json
+
+
+# Usuwam grupe robocza
+az group delete --name pd3-rg-we-dev-lab
