@@ -36,14 +36,18 @@
       "nicName": "[concat(variables('virtualNetworkName'),'-nic1')]",
       "addressPrefix": "10.0.0.0/16",
       "storageAccountType": "Standard_LRS",
-      "publicIPAddressName": "[concat(parameters('projectPrefix'),'-pip')]",
+      "publicIPAddressName1": "[concat(parameters('projectPrefix'),'-pip1')]",
+      "publicIPAddressName2": "[concat(parameters('projectPrefix'),'-pip2')]",
       "publicIPAddressType": "Dynamic",
-      "vmName": "[concat(parameters('projectPrefix'),'vm1-web')]",
+      "vmName1": "[concat(parameters('projectPrefix'),'vm1-web')]",
+      "vmName2": "[concat(parameters('projectPrefix'),'vm2-web')]",
       "vmSize": "Standard_A1",
       "virtualNetworkName": "[concat(parameters('projectPrefix'),'-vnet-weblab')]",      
-      "subnetName": "[concat(variables('virtualNetworkName'),'-subnet1-fe')]",
+      "subnetName1": "[concat(variables('virtualNetworkName'),'-subnet1-fe')]",
+      "subnetName2": "[concat(variables('virtualNetworkName'),'-subnet2-be')]",
       "subnetPrefix": "10.0.0.0/24",
-      "subnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworkName'), variables('subnetName'))]"
+      "subnetRef1": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworkName'), variables('subnetName1'))]",
+      "subnetRef2": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworkName'), variables('subnetName2'))]"
     },
     "resources": [
       {
@@ -142,6 +146,7 @@
               "version": "latest"
             },
             "osDisk": {
+              "name": "[concat(variables('vmName'),'-','osdisk')]",
               "createOption": "FromImage"
             },
             "dataDisks": [
