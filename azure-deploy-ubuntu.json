@@ -22,6 +22,8 @@
       },
       "projectPrefix": {
         "type": "string",
+        "maxLength": 3,
+        "minLength": 2,
         "metadata": {
           "description": "Unique project prefix for resources."
         }
