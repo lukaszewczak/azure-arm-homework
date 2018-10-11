@@ -30,10 +30,13 @@
     "variables": {
       "location": "[resourceGroup().location]",
       "ubuntuOSVersion": "18.04-LTS",
-      "storageAccountName": "[concat(parameters('projectPrefix'),'sa',uniquestring(resourceGroup().id))]",
+      "nsgName": "webNsg",
+      "storageAccountName1": "[concat(parameters('projectPrefix'),'sa',uniquestring(resourceGroup().id))]",
+      "storageAccountName2": "[concat(parameters('projectPrefix'),'sa',uniquestring(resourceGroup().id))]",
       "imagePublisher": "Canonical",
       "imageOffer": "UbuntuServer",
-      "nicName": "[concat(variables('virtualNetworkName'),'-nic1')]",
+      "nicName1": "[concat(variables('virtualNetworkName'),'-nic1')]",
+      "nicName2": "[concat(variables('virtualNetworkName'),'-nic2')]",
       "addressPrefix": "10.0.0.0/16",
       "storageAccountType": "Standard_LRS",
       "publicIPAddressName1": "[concat(parameters('projectPrefix'),'-pip1')]",
@@ -49,10 +52,49 @@
       "subnetRef1": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworkName'), variables('subnetName1'))]",
       "subnetRef2": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworkName'), variables('subnetName2'))]"
     },
-    "resources": [
+    "resources": [   
+      {
+        "comments": "Network Security Group",
+        "name": "[variables('nsgName')]",
+        "type": "Microsoft.Network/networkSecurityGroups",
+        "apiVersion": "2017-09-01",
+        "location": "[resourceGroup().location]",
+        "properties": {
+          "securityRules": [
+            {
+              "name": "AllowHttpAll",
+              "properties": {
+                "description": "Allow http traffic to web servers",
+                "sourceAddressPrefix": "*",
+                "sourcePortRange": "*",
+                "direction": "Inbound",
+                "access": "Allow",
+                "priority": 100,
+                "protocol": "Tcp",     
+                "destinationAddressPrefix": "*",
+                "destinationPortRange": "80"
+              }
+            },
+            {
+              "name": "AllowSshAll",
+              "properties": {
+                "description": "Allow SSH traffic to web servers",
+                "sourceAddressPrefix": "*",
+                "sourcePortRange": "*",
+                "direction": "Inbound",
+                "access": "Allow",
+                "priority": 200,
+                "protocol": "Tcp",                   
+                "destinationAddressPrefix": "*",
+                "destinationPortRange": "22"
+              }
+            }
+          ]
+        }
+      },   
       {
         "type": "Microsoft.Storage/storageAccounts",
-        "name": "[variables('storageAccountName')]",
+        "name": "[variables('storageAccountName1')]",
         "apiVersion": "2017-06-01",
         "location": "[variables('location')]",
         "sku": {
@@ -64,7 +106,7 @@
       {
         "apiVersion": "2017-06-01",
         "type": "Microsoft.Network/publicIPAddresses",
-        "name": "[variables('publicIPAddressName')]",
+        "name": "[variables('publicIPAddressName1')]",
         "location": "[variables('location')]",
         "properties": {
           "publicIPAllocationMethod": "[variables('publicIPAddressType')]",
@@ -78,6 +120,9 @@
         "type": "Microsoft.Network/virtualNetworks",
         "name": "[variables('virtualNetworkName')]",
         "location": "[variables('location')]",
+        "dependsOn": [
+          "[concat('Microsoft.Network/networkSecurityGroups/', variables('nsgName'))]"
+        ],
         "properties": {
           "addressSpace": {
             "addressPrefixes": [
@@ -86,9 +131,12 @@
           },
           "subnets": [
             {
-              "name": "[variables('subnetName')]",
+              "name": "[variables('subnetName1')]",
               "properties": {
-                "addressPrefix": "[variables('subnetPrefix')]"
+                "addressPrefix": "[variables('subnetPrefix')]",
+                "networkSecurityGroup": {
+                  "id": "[resourceId('Microsoft.Network/networkSecurityGroups/', variables('nsgName'))]"
+                }
               }
             }
           ]
@@ -97,10 +145,10 @@
       {
         "apiVersion": "2017-06-01",
         "type": "Microsoft.Network/networkInterfaces",
-        "name": "[variables('nicName')]",
+        "name": "[variables('nicName1')]",
         "location": "[variables('location')]",
         "dependsOn": [
-          "[resourceId('Microsoft.Network/publicIPAddresses/', variables('publicIPAddressName'))]",
+          "[resourceId('Microsoft.Network/publicIPAddresses/', variables('publicIPAddressName1'))]",
           "[resourceId('Microsoft.Network/virtualNetworks/', variables('virtualNetworkName'))]"
         ],
         "properties": {
@@ -110,10 +158,10 @@
               "properties": {
                 "privateIPAllocationMethod": "Dynamic",
                 "publicIPAddress": {
-                  "id": "[resourceId('Microsoft.Network/publicIPAddresses',variables('publicIPAddressName'))]"
+                  "id": "[resourceId('Microsoft.Network/publicIPAddresses',variables('publicIPAddressName1'))]"
                 },
                 "subnet": {
-                  "id": "[variables('subnetRef')]"
+                  "id": "[variables('subnetRef1')]"
                 }
               }
             }
@@ -123,18 +171,18 @@
       {
         "apiVersion": "2017-03-30",
         "type": "Microsoft.Compute/virtualMachines",
-        "name": "[variables('vmName')]",
+        "name": "[variables('vmName1')]",
         "location": "[variables('location')]",
         "dependsOn": [
-          "[resourceId('Microsoft.Storage/storageAccounts/', variables('storageAccountName'))]",
-          "[resourceId('Microsoft.Network/networkInterfaces/', variables('nicName'))]"
+          "[resourceId('Microsoft.Storage/storageAccounts/', variables('storageAccountName1'))]",
+          "[resourceId('Microsoft.Network/networkInterfaces/', variables('nicName1'))]"
         ],
         "properties": {
           "hardwareProfile": {
             "vmSize": "[variables('vmSize')]"
           },
           "osProfile": {
-            "computerName": "[variables('vmName')]",
+            "computerName": "[variables('vmName1')]",
             "adminUsername": "[parameters('adminUsername')]",
             "adminPassword": "[parameters('adminPassword')]"
           },
@@ -146,7 +194,7 @@
               "version": "latest"
             },
             "osDisk": {
-              "name": "[concat(variables('vmName'),'-','osdisk')]",
+              "name": "[concat(variables('vmName1'),'-','osdisk')]",
               "createOption": "FromImage"
             },
             "dataDisks": [
@@ -160,14 +208,14 @@
           "networkProfile": {
             "networkInterfaces": [
               {
-                "id": "[resourceId('Microsoft.Network/networkInterfaces',variables('nicName'))]"
+                "id": "[resourceId('Microsoft.Network/networkInterfaces',variables('nicName1'))]"
               }
             ]
           },
           "diagnosticsProfile": {
             "bootDiagnostics": {
               "enabled": true,
-              "storageUri": "[concat(reference(concat('Microsoft.Storage/storageAccounts/', variables('storageAccountName')), '2016-01-01').primaryEndpoints.blob)]"
+              "storageUri": "[concat(reference(concat('Microsoft.Storage/storageAccounts/', variables('storageAccountName1')), '2016-01-01').primaryEndpoints.blob)]"
             }
           }
         }
@@ -176,11 +224,11 @@
     "outputs": {
       "hostname": {
         "type": "string",
-        "value": "[reference(variables('publicIPAddressName')).dnsSettings.fqdn]"
+        "value": "[reference(variables('publicIPAddressName1')).dnsSettings.fqdn]"
       },
       "sshCommand": {
         "type": "string",
-        "value": "[concat('ssh ', parameters('adminUsername'), '@', reference(variables('publicIPAddressName')).dnsSettings.fqdn)]"
+        "value": "[concat('ssh ', parameters('adminUsername'), '@', reference(variables('publicIPAddressName1')).dnsSettings.fqdn)]"
       }
     }
   }
