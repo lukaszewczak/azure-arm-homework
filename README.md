@@ -109,6 +109,9 @@ nazwa powinna być krótka i odnosić się do przeznaczenia danej podsieci
 
 > Kilka reguł zostało częściowo zdefiniowanych przy pomozy Azure Policy. Przykładowe definicje polityk znajdują się w [policy](/policy)
 
+Na podstawie przykłądowych polityk zaczołem tworzyć inicjatywe Audit Naming conventions.
+
+![initiative](initiative-naming-conventions.png)
 
 # Zadanie 3.2
 
