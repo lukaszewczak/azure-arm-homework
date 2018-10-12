@@ -29,7 +29,7 @@ az keyvault secret set --vault-name arm-lab-key-vault --name adminUsername --val
 az group create --name pd3-rg-we-dev-lab_key_vault --location westeurope 
 
 # Deploy szablonu arm do grupy zasobow z dwoma maszynami wirtualnymi w roznych subnetach w tym samym vnecie z uzycie Key Vault
-az group deployment create  --query [properties.outputs.sshCommandLab1.value,properties.outputs.sshCommandLab2.value]  --resource-group pd3-rg-we-dev-lab_key_vault --name zad3.4 --template-file azure-deploy-ubuntu.nested.json --parameters azure-deploy-ubuntu.parameters.nested.keyvault.json
+az group deployment create  --query [properties.outputs.sshCommandLab1.value,properties.outputs.sshCommandLab2.value]  --resource-group pd3-rg-we-dev-lab_key_vault --name zad3.4 --template-file arm-templates/azure-deploy-ubuntu.nested.json --parameters arm-templates/azure-deploy-ubuntu.parameters.nested.keyvault.private.json
 
 
 # Usuwam grupe robocza
