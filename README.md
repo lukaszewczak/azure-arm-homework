@@ -107,13 +107,13 @@ nazwa powinna być krótka i odnosić się do przeznaczenia danej podsieci
 - nazwa powinna zawierać nazwę maszyny wirtualnej lub innego zasobu/usługi do którego zostanie przypisany publiczny adres ip
 
 
-> Kilka reguł zostało częsciowi zdefiniowanych rzy pomozy Azure Policy. Przykładowe definicje polityk znajdują się w [policy](/policy)
+> Kilka reguł zostało częściowo zdefiniowanych przy pomozy Azure Policy. Przykładowe definicje polityk znajdują się w [policy](/policy)
 
 
 # Zadanie 3.2
 
- Deploy szablonu arm do grupy zasobow z dwoma maszynami wirtualnymi w różnych subnetach w tym samym vnecie z wykorzystaniem Linked Template. Dodatkowow do obu maszyn wirtualnych został podpięty publiczny adres ip,
- aby można było testowo dostać się na maszynę. Podczas deployu została stwrzonoa Network Security Group pozwalająca na ruch po http i po ssh.
+ Deploy szablonu arm do grupy zasobów z dwoma maszynami wirtualnymi w różnych subnetach w tym samym vnecie z wykorzystaniem Linked Template. Dodatkowow do obu maszyn wirtualnych został podpięty publiczny adres ip,
+ aby można było testowo dostać się na maszynę. Podczas deployu została stworzono Network Security Group pozwalająca na ruch po http i po ssh.
 
  Główny plik szablonu zlokalizowany jest w [arm-templates/azure-deploy-ubuntu.nested.json](arm-templates/azure-deploy-ubuntu.nested.json). Wszystkie połączone szablony zlokalizowane są w
  `arm-templates/shared`.
@@ -133,7 +133,7 @@ nazwa powinna być krótka i odnosić się do przeznaczenia danej podsieci
 # Zadanie 3.3
 
 Miało być najprostsze zadanie :-), ale już na samym początku pojawił się problem. 
-Próba zdeployowania prostej roli zdefiniowanje w pliku [rbac/vm-simple-operartor.json](rbac/vm-simple-operator.json), zakończyło się błędem.
+Próba zdeployowania prostej roli zdefiniowanje w pliku [rbac/vm-simple-operartor.json](rbac/vm-simple-operator.json), zakończyła się błędem.
 
 ```
 The client 'live.com#lukaszewczak@outlook.com' with object id 'f3' does not have authorization to perform action 'Microsoft.Authorization/roleDefinitions/write' over scope '/providers/Microsoft.Authorization/roleDefinitions/50'
@@ -176,7 +176,7 @@ az keyvault secret set --vault-name arm-lab-key-vault --name adminUsername --val
 
 ```
 
-Następnie deploy z podobną koemnda jak w zadaniu 3.2 z tą różnicą, że przekazujemy inny plik z parametrami,
+Następnie deploy z podobną komendą jak w zadaniu 3.2 z tą różnicą, że przekazujemy inny plik z parametrami,
 w którym zamiast jawnie podawać hasło i użytkownika odwołujemy się do Key Vaulta
 
 ```
