@@ -27,10 +27,10 @@
         "value": "pA$$w0rd"
     },
     "dnsNameForPublicIPLab01": {
-        "value": "lukaszsvmubuntulab01"
+        "value": "lukaszsvmubuntulab01-pass"
     },
     "dnsNameForPublicIPLab02": {
-        "value": "lukaszsvmubuntulab02"
+        "value": "lukaszsvmubuntulab02-pass"
     },
     "projectPrefix": {
         "value": "pd3"

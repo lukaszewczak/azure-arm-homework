@@ -37,10 +37,10 @@
             }
         },
         "dnsNameForPublicIPLab01": {
-            "value": "lukaszsvmubuntulab01"
+            "value": "lukaszsvmubuntulab01-keyvault"
         },
         "dnsNameForPublicIPLab02": {
-            "value": "lukaszsvmubuntulab02"
+            "value": "lukaszsvmubuntulab02-keyvault"
         },
         "projectPrefix": {
             "value": "pd3"
