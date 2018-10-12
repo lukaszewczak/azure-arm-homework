@@ -5,11 +5,11 @@ az group create --name pd3-rg-we-dev-lab --location westeurope
 
 
 # Deploy szablonu arm do grupy zasobow z jedna maszyna wirtualna
-az group deployment create --resource-group pd3-rg-we-dev-lab --name zad3.2 --template-file azure-deploy-ubuntu.json --parameters azure-deploy-ubuntu.parameters.json
+az group deployment create --resource-group pd3-rg-we-dev-lab --name zad3.2 --template-file arm-templates/azure-deploy-ubuntu.json --parameters arm-templates/azure-deploy-ubuntu.parameters.json
 
 
 # Deploy szablonu arm do grupy zasobow z dwoma maszynami wirtualnymi w roznych subnetach w tym samym vnecie
-az group deployment create  --query [properties.outputs.sshCommandLab1.value,properties.outputs.sshCommandLab2.value]  --resource-group pd3-rg-we-dev-lab --name zad3.2 --template-file azure-deploy-ubuntu.nested.json --parameters azure-deploy-ubuntu.parameters.nested.json
+az group deployment create  --query [properties.outputs.sshCommandLab1.value,properties.outputs.sshCommandLab2.value]  --resource-group pd3-rg-we-dev-lab --name zad3.2 --template-file arm-templates/azure-deploy-ubuntu.nested.json --parameters arm-templates/azure-deploy-ubuntu.parameters.nested.json
 
 
 # Usuwam grupe robocza
