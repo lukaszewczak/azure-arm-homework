@@ -1,0 +1,22 @@
+{
+    "Name": "Virtual Machine Simple Operator",
+    "IsCustom": true,
+    "Description": "Can start and stop virtual machines with access to support",
+    "Actions": [
+      "Microsoft.Storage/*/read",
+      "Microsoft.Network/*/read",
+      "Microsoft.Compute/*/read",
+      "Microsoft.Compute/virtualMachines/start/action",
+      "Microsoft.Compute/virtualMachines/stop/action",
+      "Microsoft.Authorization/*/read",
+      "Microsoft.Resources/subscriptions/resourceGroups/read",
+      "Microsoft.Insights/alertRules/*",
+      "Microsoft.Support/*"
+    ],
+    "NotActions": [
+  
+    ],
+    "AssignableScopes": [
+      "/"
+    ]
+  }
