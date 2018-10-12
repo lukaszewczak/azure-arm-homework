@@ -24,7 +24,7 @@
         "value": "lukaszs"
     },
     "adminPassword": {
-        "value": "pA$$w0rd"
+        "value": "Password1"
     },
     "dnsNameForPublicIPLab01": {
         "value": "lukaszsvmubuntulab01"

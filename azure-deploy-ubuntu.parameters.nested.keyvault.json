@@ -21,12 +21,17 @@
             "value": "virtual-machine.json"
         },
         "adminUsername": {
-            "value": "lukaszs"
+            "reference": {
+                "keyVault": {
+                    "id": "/subscriptions/<SUBSCRIPTION_ID>/resourceGroups/sec-rg-we-dev-key_vault/providers/Microsoft.KeyVault/vaults/arm-lab-key-vault"
+                },
+                "secretName": "adminUsername"
+            }
         },
         "adminPassword": {
             "reference": {
                 "keyVault": {
-                    "id": "/subscriptions/<SUBSCRIPTION_ID>/resourceGroups/resourceGroupName/providers/Microsoft.KeyVault/vaults/vaultName"
+                    "id": "/subscriptions/<SUBSCRIPTION_ID>/resourceGroups/sec-rg-we-dev-key_vault/providers/Microsoft.KeyVault/vaults/arm-lab-key-vault"
                 },
                 "secretName": "adminPassword"
             }

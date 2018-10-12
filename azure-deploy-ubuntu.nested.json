@@ -21,7 +21,7 @@
       }
     },
     "adminUsername": {
-      "type": "string",
+      "type": "securestring",
       "metadata": {
         "description": "User name for the Virtual Machine."
       }
