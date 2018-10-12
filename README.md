@@ -139,7 +139,7 @@ Próba zdeployowania prostej roli zdefiniowanje w pliku [rbac/vm-simple-operarto
 The client 'live.com#lukaszewczak@outlook.com' with object id 'f3' does not have authorization to perform action 'Microsoft.Authorization/roleDefinitions/write' over scope '/providers/Microsoft.Authorization/roleDefinitions/50'
 ```
 
-Okazuje się, że jestem Globalnym administratorem w Azure Ad to nie mam uprawnień potrzebnych do zarządzania sybksrybcją. Na szczęście na podstawie artykułu [https://docs.microsoft.com/en-us/azure/role-based-access-control/elevate-access-global-admin](https://docs.microsoft.com/en-us/azure/role-based-access-control/elevate-access-global-admin). 
+Okazuje się, że jestem globalnym administratorem w Azure Ad a mimo to nie mam uprawnień potrzebnych do zarządzania sybksrybcją. Na szczęście na podstawie artykułu [https://docs.microsoft.com/en-us/azure/role-based-access-control/elevate-access-global-admin](https://docs.microsoft.com/en-us/azure/role-based-access-control/elevate-access-global-admin), dowiedziałem się że uprawnienia Azure Ad i rbac to troche co innego i również to, że mogę je podnieść. 
 
 Po podniesieniu uprawnienień deploy własnej roli rbac powiódł się:-). 
 
