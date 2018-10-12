@@ -41,6 +41,10 @@
         "publicIpID": {
             "type": "string",
             "value": "[resourceId('Microsoft.Network/publicIPAddresses', variables('publicIPAddressName'))]"
+        },
+        "publicIpFqdn": {
+            "type":"string",
+            "value": "[reference(variables('publicIPAddressName')).dnsSettings.fqdn]"
         }
     }
 }

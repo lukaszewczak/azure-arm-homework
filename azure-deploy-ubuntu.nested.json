@@ -256,14 +256,13 @@
     }
   ],
   "outputs": {
-    
     "hostnameLab1": {
       "type": "string",
-      "value": "[reference(reference(variables('nestedDeploymentNamePublicIpLab1')).outputs.publicIpName.value).dnsSettings.fqdn]"
+      "value": "[reference(variables('nestedDeploymentNamePublicIpLab1')).outputs.publicIpFqdn.value]"
     },
     "sshCommandLab1": {
       "type": "string",
-      "value": "[concat('ssh ', parameters('adminUsername'), '@', reference(variables('nestedDeploymentNamePublicIpLab1')).outputs.publicIpName.value.dnsSettings.fqdn)]"
+      "value": "[concat('ssh ', parameters('adminUsername'), '@', reference(variables('nestedDeploymentNamePublicIpLab1')).outputs.publicIpFqdn.value)]"
     }
   }
 }
