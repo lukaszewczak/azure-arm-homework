@@ -11,8 +11,8 @@
         "nicNumber": {
             "type": "int",
             "defaultValue": 1,
-            "minLength": 1,
-            "maxLength": 9,
+            "minValue": 1,
+            "maxValue": 9,
             "metadata": {
                 "description": "Number of the network interface."
             }
