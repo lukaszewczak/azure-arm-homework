@@ -20,14 +20,6 @@
         "description": "Template name for the virtual network."
       }
     },
-    "vNetName": {
-      "type": "string",
-      "maxLength": 50,
-      "minLength": 2,
-      "metadata": {
-        "description": "Name of the virtual network."
-      }
-    },
     "adminUsername": {
       "type": "string",
       "metadata": {
@@ -64,6 +56,12 @@
         "description": "Template name for the network interface."
       }
     },
+    "sharedTemplateNameVM": {
+      "type": "string",
+      "metadata": {
+        "description": "Template name for the virtual machine."
+      }
+    },
     "projectPrefix": {
       "type": "string",
       "maxLength": 3,
@@ -84,7 +82,8 @@
     "nestedDeploymentNameVMLab1": "deploy-virtual-machine-ubuntu-lab1",
     "nestedDeploymentNameVMLab2": "deploy-virtual-machine-ubuntu-lab2",
     "vmNameLab1": "[concat(parameters('projectPrefix'),'-vm1-lab')]",
-    "vmNameLab2": "[concat(parameters('projectPrefix'),'-vm2-lab')]"
+    "vmNameLab2": "[concat(parameters('projectPrefix'),'-vm2-lab')]",
+    "vNetName": "lab"
         
   },
   "resources": [
@@ -120,7 +119,7 @@
         },
         "parameters": {
           "vNetName": {
-            "value": "[parameters('vNetName')]"
+            "value": "[variables('vNetName')]"
           },
           "nsgName": {
             "value": "[reference(variables('nestedDeploymentNameNSG')).outputs.vmNsgName.value]"
@@ -223,7 +222,7 @@
       "properties": {
         "mode": "Incremental",
         "templateLink": {
-          "uri": "[concat(parameters('baseTemplateUri'), '/shared/', parameters('sharedTemplateNameNic'))]",
+          "uri": "[concat(parameters('baseTemplateUri'), '/shared/', parameters('sharedTemplateNameVM'))]",
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
@@ -231,6 +230,27 @@
           "adminUsername": {"value": "[parameters('adminUsername')]"},
           "adminPassword": {"value": "[parameters('adminPassword')]"},
           "vmNic": { "value": "[reference(variables('nestedDeploymentNameNicLab1')).outputs.vmNicID.value]" }          
+        }
+      }
+    },
+    {
+      "name": "[variables('nestedDeploymentNameVMLab2')]",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2015-01-01",
+      "dependsOn": [
+        "[concat('Microsoft.Resources/deployments/', variables('nestedDeploymentNameNicLab2'))]"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(parameters('baseTemplateUri'), '/shared/', parameters('sharedTemplateNameVM'))]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "vmName": { "value": "[variables('vmNameLab2')]" },
+          "adminUsername": {"value": "[parameters('adminUsername')]"},
+          "adminPassword": {"value": "[parameters('adminPassword')]"},
+          "vmNic": { "value": "[reference(variables('nestedDeploymentNameNicLab2')).outputs.vmNicID.value]" }          
         }
       }
     }
