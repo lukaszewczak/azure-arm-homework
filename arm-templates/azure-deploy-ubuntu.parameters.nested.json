@@ -3,7 +3,7 @@
   "contentVersion": "1.0.0.0",
   "parameters": {      
     "baseTemplateUri": {
-        "value": "https://raw.githubusercontent.com/lukaszewczak/azure-arm-homework/master"
+        "value": "https://raw.githubusercontent.com/lukaszewczak/azure-arm-homework/master/arm-templates"
     },
     "sharedTemplateNameNSG":{
         "value": "network-security-group-http-ssh.json"
