@@ -1,0 +1,23 @@
+{
+    "mode": "all",
+    "policyRule": {
+      "if": {
+        "allOf": [
+          {
+            "field": "type",
+            "equals": "Microsoft.Compute/virtualMachines"
+          },
+          {
+            "not": {
+              "field": "name",
+              "match": "[0-9a-z]{2,3}-vm[1-9]?-[0-9a-z_-]{2,5}"
+            }
+          }
+        ]
+      },
+      "then": {
+        "effect": "audit"
+      }
+    },
+    "parameters": {}
+  }

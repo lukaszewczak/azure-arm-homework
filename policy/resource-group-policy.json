@@ -1,0 +1,23 @@
+{
+    "mode": "all",
+    "policyRule": {
+      "if": {
+        "allOf": [
+          {
+            "field": "type",
+            "equals": "Microsoft.Resources/subscriptions/resourceGroups"
+          },
+          {
+            "not": {
+              "field": "name",
+              "match": "[0-9a-z]{2,3}-rg-[ne|we|fc|fs|uw|us|gc|gne|gn|gwc|sn|sw|nye|nyw]-[prod|dev|qa]-[0-9a-z_-]{3,60}"
+            }
+          }
+        ]
+      },
+      "then": {
+        "effect": "audit"
+      }
+    },
+    "parameters": {}
+  }

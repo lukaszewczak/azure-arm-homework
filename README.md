@@ -106,3 +106,5 @@ nazwa powinna być krótka i odnosić się do przeznaczenia danej podsieci
 - długość pola nazwa: 2-40
 - nazwa powinna zawierać nazwę maszyny wirtualnej lub innego zasobu/usługi do którego zostanie przypisany publiczny adres ip
 
+
+> Kilka reguł zostało częsciowi zdefiniowanych rzy pomozy Azure Policy. Przykładowe definicje polityk znajdują się w [policy](/policy)
