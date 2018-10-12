@@ -124,6 +124,10 @@ nazwa powinna być krótka i odnosić się do przeznaczenia danej podsieci
  az group deployment create  --query [properties.outputs.sshCommandLab1.value,properties.outputs.sshCommandLab2.value]  --resource-group pd3-rg-we-dev-lab --name zad3.2 --template-file arm-templates/azure-deploy-ubuntu.nested.json --parameters arm-templates/azure-deploy-ubuntu.parameters.nested.json
  ```
 
+ Powstała sieć:
+ 
+![vnet](vnet-topology.png)
+
 > Komendy do uruchomienia znajdują się w pliku [deploy.azcli](deploy.azcli)
 
 # Zadanie 3.3
@@ -146,3 +150,8 @@ az role definition create --role-definition rbac/vm-simple-operator.json
 ```
 
 > Przed deployem, należy podać w pliku definicji roli rbac **id subskrybcji**
+
+
+Po deployu, rola widoczna jest na poziomie sybksrybcji 
+
+![custom-rbac](custom-rbac.png)
