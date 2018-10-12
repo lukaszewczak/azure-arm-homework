@@ -1,0 +1,88 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+      "vNetName": {
+        "type": "string",
+        "maxLength": 50,
+        "minLength": 2,
+        "metadata": {
+          "description": "Name of the virtual network."
+        }
+      },
+      "nsgName": {
+        "type": "string",
+        "metadata": {
+          "description": "Name of the network security group."
+        }
+      },
+      "projectPrefix": {
+        "type": "string",
+        "maxLength": 3,
+        "minLength": 2,
+        "metadata": {
+          "description": "Unique project prefix for resources."
+        }
+      }
+    },
+    "variables": {
+        "virtualNetworkName": "[concat(parameters('projectPrefix'),'-vnet-',parameters('vNetName'))]",
+        "addressPrefix": "10.0.0.0/16",
+        "subnetLab01Name": "[concat(variables('virtualNetworkName'),'-subnet01-lab')]",
+        "subnetLab02Name": "[concat(variables('virtualNetworkName'),'-subnet02-lab')]",
+        "subnetLab01Prefix": "10.0.1.0/24",
+        "subnetLab02Prefix": "10.0.2.0/24",
+        "vNetID": "[resourceId('Microsoft.Network/virtualNetworks', variables('virtualNetworkName'))]",
+        "subnetLab01ID": "[concat(variables('vNetID'), '/subnets/', variables('subnetLab01Name'))]",
+        "subnetLab02ID": "[concat(variables('vNetID'), '/subnets/', variables('subnetLab02Name'))]"
+     },
+    "resources": [   
+      {
+        "apiVersion": "2017-06-01",
+        "type": "Microsoft.Network/virtualNetworks",
+        "name": "[variables('virtualNetworkName')]",
+        "location": "[resourceGroup().location]",
+        "dependsOn": [
+          "[concat('Microsoft.Network/networkSecurityGroups/', parameters('nsgName'))]"
+        ],
+        "properties": {
+          "addressSpace": {
+            "addressPrefixes": [
+              "[variables('addressPrefix')]"
+            ]
+          },
+          "subnets": [
+            {
+              "name": "[variables('subnetLab01Name')]",
+              "properties": {
+                "addressPrefix": "[variables('subnetLab01Prefix')]",
+                "networkSecurityGroup": {
+                  "id": "[resourceId('Microsoft.Network/networkSecurityGroups/', parameters('nsgName'))]"
+                }
+              }
+            },
+            {
+              "name": "[variables('subnetLab02Name')]",
+              "properties": {
+                "addressPrefix": "[variables('subnetLab02Prefix')]",
+                "networkSecurityGroup": {
+                  "id": "[resourceId('Microsoft.Network/networkSecurityGroups/', parameters('nsgName'))]"
+                }
+              }
+            }
+          ]
+        }
+      }
+    ],
+    "outputs": {
+      "subnet1ID": {
+        "type": "string",
+        "value": "[variables('subnetLab01ID')]"
+      },
+      "subnet2ID": {
+        "type": "string",
+        "value": "[variables('subnetLab02ID')]"
+      }
+    }
+  }
+  

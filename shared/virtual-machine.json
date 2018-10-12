@@ -14,10 +14,29 @@
                 "description": "Password for the Virtual Machine."
             }
         },
+        "projectPrefix": {
+            "type": "string",
+            "maxLength": 3,
+            "minLength": 2,
+            "metadata": {
+                "description": "Unique project prefix for resources."
+            }
+        },
+        "vmNumber": {
+            "type": "int",
+            "defaultValue": 1,
+            "minLength": 1,
+            "maxLength": 9,
+            "metadata": {
+                "description": "Number of the vm."
+            }
+        },
         "vmName": {
             "type": "string",
+            "maxLength": 5,
+            "minLength": 2,
             "metadata": {
-                "description": "Name of the virtual machine"
+                "description": "Name of the virtual machine for network interface."
             }
         },
         "vmNic": {
@@ -28,24 +47,25 @@
         }
     },
     "variables": {
-        "location": "[resourceGroup().location]",
         "ubuntuOSVersion": "18.04-LTS",
         "imagePublisher": "Canonical",
         "imageOffer": "UbuntuServer",
-        "vmSize": "Standard_A1"
+        "vmSize": "Standard_A1",
+        "vmName": "[concat(parameters('projectPrefix'),'-vm',parameters('vmNumber'),'-',parameters('vmName'))]",
+        "vmOSDiskName": "[concat(variables('vmName'),'-','osdisk')]"
     },
     "resources": [
         {
             "apiVersion": "2017-03-30",
             "type": "Microsoft.Compute/virtualMachines",
-            "name": "[parameters('vmName')]",
-            "location": "[variables('location')]",
+            "name": "[variables('vmName')]",
+            "location": "[resourceGroup().location]",
             "properties": {
                 "hardwareProfile": {
                     "vmSize": "[variables('vmSize')]"
                 },
                 "osProfile": {
-                    "computerName": "[parameters('vmName')]",
+                    "computerName": "[variables('vmName')]",
                     "adminUsername": "[parameters('adminUsername')]",
                     "adminPassword": "[parameters('adminPassword')]"
                 },
@@ -57,16 +77,9 @@
                         "version": "latest"
                     },
                     "osDisk": {
-                        "name": "[concat(parameters('vmName'),'-','osdisk')]",
+                        "name": "[variables('vmOSDiskName')]",
                         "createOption": "FromImage"
-                    },
-                    "dataDisks": [
-                        {
-                            "diskSizeGB": 1023,
-                            "lun": 0,
-                            "createOption": "Empty"
-                        }
-                    ]
+                    }
                 },
                 "networkProfile": {
                     "networkInterfaces": [

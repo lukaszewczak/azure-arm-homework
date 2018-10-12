@@ -2,10 +2,19 @@
     "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "nicName": {
+        "vmName": {
             "type": "string",
             "metadata": {
-                "description": "Name of the network interface."
+                "description": "Name of the virtual machine for network interface."
+            }
+        },
+        "nicNumber": {
+            "type": "int",
+            "defaultValue": 1,
+            "minLength": 1,
+            "maxLength": 9,
+            "metadata": {
+                "description": "Number of the network interface."
             }
         },
         "subnetID": {
@@ -21,12 +30,14 @@
             }
         }
     },
-    "variables": {},
+    "variables": {
+        "nicName": "[concat(parameters('vmName'),'-nic',parameters('nicNumber'))]"
+    },
     "resources": [
         {
             "apiVersion": "2017-06-01",
             "type": "Microsoft.Network/networkInterfaces",
-            "name": "[parameters('nicName')]",
+            "name": "[variables('nicName')]",
             "location": "[resourceGroup().location]",
             "properties": {
                 "ipConfigurations": [
@@ -46,5 +57,10 @@
             }
         }
     ],
-    "outputs": {}
+    "outputs": {
+        "vmNic": {
+            "type": "string",
+            "value": "[resourceId('Microsoft.Network/networkInterfaces', variables('nicName'))]"
+        }
+    }
 }
