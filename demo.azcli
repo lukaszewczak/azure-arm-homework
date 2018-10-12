@@ -1,1 +1,0 @@
-az vm image list --offer UbuntuServer --all --output table
