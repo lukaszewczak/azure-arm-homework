@@ -155,3 +155,48 @@ az role definition create --role-definition rbac/vm-simple-operator.json
 Po deployu, rola widoczna jest na poziomie sybksrybcji 
 
 ![custom-rbac](custom-rbac.png)
+
+# Zadanie 3.4
+
+Deploy takiej samej sieci jak w zadaniu 3.2 tylko przy uzyciu Azure Key Vault do przechowania nazwy użytkownika i hasła.
+
+Na początek tworzymy Key Vault
+
+```
+# Tworze grupe robocza dla key vault
+az group create --name sec-rg-we-dev-key_vault --location westeurope
+
+# Tworze key vault
+az keyvault create --resource-group sec-rg-we-dev-key_vault --name arm-lab-key-vault --location westeurope --enabled-for-template-deployment true
+
+
+# Dodaj haslo i nazwe uzytkownika do key vault
+az keyvault secret set --vault-name arm-lab-key-vault --name adminPassword --value pA$$w0rd
+az keyvault secret set --vault-name arm-lab-key-vault --name adminUsername --value lukaszs
+
+```
+
+Następnie deploy z podobną koemnda jak w zadaniu 3.2 z tą różnicą, że przekazujemy inny plik z parametrami,
+w którym zamiast jawnie podawać hasło i użytkownika odwołujemy się do Key Vaulta
+
+```
+
+        "adminUsername": {
+            "reference": {
+                "keyVault": {
+                    "id": "/subscriptions/<SUBSCRIPTION_ID>/resourceGroups/sec-rg-we-dev-key_vault/providers/Microsoft.KeyVault/vaults/arm-lab-key-vault"
+                },
+                "secretName": "adminUsername"
+            }
+        },
+        "adminPassword": {
+            "reference": {
+                "keyVault": {
+                    "id": "/subscriptions/<SUBSCRIPTION_ID>/resourceGroups/sec-rg-we-dev-key_vault/providers/Microsoft.KeyVault/vaults/arm-lab-key-vault"
+                },
+                "secretName": "adminPassword"
+            }
+        },
+```
+
+> Przed deployem należy zmienić SUBSCRIPTION_ID
