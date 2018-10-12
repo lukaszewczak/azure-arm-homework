@@ -263,6 +263,14 @@
     "sshCommandLab1": {
       "type": "string",
       "value": "[concat('ssh ', parameters('adminUsername'), '@', reference(variables('nestedDeploymentNamePublicIpLab1')).outputs.publicIpFqdn.value)]"
+    },
+    "hostnameLab2": {
+      "type": "string",
+      "value": "[reference(variables('nestedDeploymentNamePublicIpLab2')).outputs.publicIpFqdn.value]"
+    },
+    "sshCommandLab2": {
+      "type": "string",
+      "value": "[concat('ssh ', parameters('adminUsername'), '@', reference(variables('nestedDeploymentNamePublicIpLab2')).outputs.publicIpFqdn.value)]"
     }
   }
 }
