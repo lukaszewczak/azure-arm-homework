@@ -58,7 +58,7 @@
         }
     ],
     "outputs": {
-        "vmNic": {
+        "vmNicID": {
             "type": "string",
             "value": "[resourceId('Microsoft.Network/networkInterfaces', variables('nicName'))]"
         }

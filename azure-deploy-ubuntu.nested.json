@@ -58,13 +58,6 @@
         "description": "Template name for the Public IP."
       }
     },
-    "sharedTemplateNameStorage": {
-      "type": "string",
-      "metadata": {
-        "description": "Template name for the storage account."
-      }
-    },
-    ,
     "sharedTemplateNameNic": {
       "type": "string",
       "metadata": {
@@ -87,7 +80,12 @@
     "nestedDeploymentNamePublicIpLab2": "deploy-public-ip-lab2",
     "nestedDeploymentNameStorage": "deploy-storage-account",
     "nestedDeploymentNameNicLab1": "deploy-network-interface-lab1",
-    "nestedDeploymentNameNicLab2": "deploy-network-interface-lab2"
+    "nestedDeploymentNameNicLab2": "deploy-network-interface-lab2",
+    "nestedDeploymentNameVMLab1": "deploy-virtual-machine-ubuntu-lab1",
+    "nestedDeploymentNameVMLab2": "deploy-virtual-machine-ubuntu-lab2",
+    "vmNameLab1": "[concat(parameters('projectPrefix'),'-vm1-lab')]",
+    "vmNameLab2": "[concat(parameters('projectPrefix'),'-vm2-lab')]"
+        
   },
   "resources": [
     {
@@ -174,23 +172,6 @@
       }
     },
     {
-      "name": "[variables('nestedDeploymentNameStorage')]",
-      "type": "Microsoft.Resources/deployments",
-      "apiVersion": "2015-01-01",
-      "properties": {
-        "mode": "Incremental",
-        "templateLink": {
-          "uri": "[concat(parameters('baseTemplateUri'), '/shared/', parameters('sharedTemplateNameStorage'))]",
-          "contentVersion": "1.0.0.0"
-        },
-        "parameters": {
-          "projectPrefix": {
-            "value": "[parameters('projectPrefix')]"
-          }
-        }
-      }
-    },
-    {
       "name": "[variables('nestedDeploymentNameNicLab1')]",
       "type": "Microsoft.Resources/deployments",
       "apiVersion": "2015-01-01",
@@ -205,21 +186,63 @@
           "contentVersion": "1.0.0.0"
         },
         "parameters": {
-          "vmName": { "value": "todo" },
+          "vmName": { "value": "[variables('vmNameLab1')]" },
           "subnetID": { "value": "[reference(variables('nestedDeploymentNameVnet')).outputs.subnet1ID.value]" },
           "publicIpID": { "value": "[reference(variables('nestedDeploymentNamePublicIpLab1')).outputs.publicIpID.value]" }
+        }
+      }
+    },
+    {
+      "name": "[variables('nestedDeploymentNameNicLab2')]",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2015-01-01",
+      "dependsOn": [
+        "[concat('Microsoft.Resources/deployments/', variables('nestedDeploymentNameVnet'))]",
+        "[concat('Microsoft.Resources/deployments/', variables('nestedDeploymentNamePublicIpLab2'))]"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(parameters('baseTemplateUri'), '/shared/', parameters('sharedTemplateNameNic'))]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "vmName": { "value": "[variables('vmNameLab2')]" },
+          "subnetID": { "value": "[reference(variables('nestedDeploymentNameVnet')).outputs.subnet2ID.value]" },
+          "publicIpID": { "value": "[reference(variables('nestedDeploymentNamePublicIpLab2')).outputs.publicIpID.value]" }
+        }
+      }
+    },
+    {
+      "name": "[variables('nestedDeploymentNameVMLab1')]",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2015-01-01",
+      "dependsOn": [
+        "[concat('Microsoft.Resources/deployments/', variables('nestedDeploymentNameNicLab1'))]"
+      ],
+      "properties": {
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[concat(parameters('baseTemplateUri'), '/shared/', parameters('sharedTemplateNameNic'))]",
+          "contentVersion": "1.0.0.0"
+        },
+        "parameters": {
+          "vmName": { "value": "[variables('vmNameLab1')]" },
+          "adminUsername": {"value": "[parameters('adminUsername')]"},
+          "adminPassword": {"value": "[parameters('adminPassword')]"},
+          "vmNic": { "value": "[reference(variables('nestedDeploymentNameNicLab1')).outputs.vmNicID.value]" }          
         }
       }
     }
   ],
   "outputs": {
-    "hostname": {
+    "hostnameLab1": {
       "type": "string",
-      "value": "[reference(variables('publicIPAddressName1')).dnsSettings.fqdn]"
+      "value": "[reference(variables('nestedDeploymentNamePublicIpLab1')).outputs.publicIpName.value.dnsSettings.fqdn]"
     },
-    "sshCommand": {
+    "sshCommandLab1": {
       "type": "string",
-      "value": "[concat('ssh ', parameters('adminUsername'), '@', reference(variables('publicIPAddressName1')).dnsSettings.fqdn)]"
+      "value": "[concat('ssh ', parameters('adminUsername'), '@', reference(variables('nestedDeploymentNamePublicIpLab1')).outputs.publicIpName.value.dnsSettings.fqdn)]"
     }
   }
 }

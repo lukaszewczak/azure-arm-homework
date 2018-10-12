@@ -34,9 +34,13 @@
         }
     ],
     "outputs": {
+        "publicIpName": {
+            "type": "string",
+            "value": "[variables('publicIPAddressName')]"
+        },
         "publicIpID": {
             "type": "string",
-            "value": "[resourceId('Microsoft.Network/publicIPAddresses', parameters('publicIpName'))]"
+            "value": "[resourceId('Microsoft.Network/publicIPAddresses', variables('publicIPAddressName'))]"
         }
     }
 }

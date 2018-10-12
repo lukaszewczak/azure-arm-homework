@@ -14,27 +14,8 @@
                 "description": "Password for the Virtual Machine."
             }
         },
-        "projectPrefix": {
-            "type": "string",
-            "maxLength": 3,
-            "minLength": 2,
-            "metadata": {
-                "description": "Unique project prefix for resources."
-            }
-        },
-        "vmNumber": {
-            "type": "int",
-            "defaultValue": 1,
-            "minLength": 1,
-            "maxLength": 9,
-            "metadata": {
-                "description": "Number of the vm."
-            }
-        },
         "vmName": {
             "type": "string",
-            "maxLength": 5,
-            "minLength": 2,
             "metadata": {
                 "description": "Name of the virtual machine for network interface."
             }
@@ -51,21 +32,20 @@
         "imagePublisher": "Canonical",
         "imageOffer": "UbuntuServer",
         "vmSize": "Standard_A1",
-        "vmName": "[concat(parameters('projectPrefix'),'-vm',parameters('vmNumber'),'-',parameters('vmName'))]",
-        "vmOSDiskName": "[concat(variables('vmName'),'-','osdisk')]"
+        "vmOSDiskName": "[concat(parameters('vmName'),'-','osdisk')]"
     },
     "resources": [
         {
             "apiVersion": "2017-03-30",
             "type": "Microsoft.Compute/virtualMachines",
-            "name": "[variables('vmName')]",
+            "name": "[parameters('vmName')]",
             "location": "[resourceGroup().location]",
             "properties": {
                 "hardwareProfile": {
                     "vmSize": "[variables('vmSize')]"
                 },
                 "osProfile": {
-                    "computerName": "[variables('vmName')]",
+                    "computerName": "[parameters('vmName')]",
                     "adminUsername": "[parameters('adminUsername')]",
                     "adminPassword": "[parameters('adminPassword')]"
                 },
